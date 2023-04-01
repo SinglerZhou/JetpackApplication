@@ -19,6 +19,8 @@ public class MainActivity extends AppCompatActivity {
 //        setContentView(R.layout.activity_main);
         mDataBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         initData();
+
+        getLifecycle().addObserver(new MyObserver());
     }
 
     private void initData() {
