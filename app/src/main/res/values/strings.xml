@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">JetpackApplication</string>
+    <string name="user_name">用户名</string>
+    <string name="please_enter_name">请输入用户名</string>
+    <string name="user_age">年龄</string>
+    <string name="please_enter_password">请输入密码</string>
+    <string name="user_height">身高</string>
+    <string name="please_enter_height">请输入身高</string>
 </resources>
