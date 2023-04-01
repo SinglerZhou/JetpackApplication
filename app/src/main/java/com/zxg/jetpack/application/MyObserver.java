@@ -1,13 +1,19 @@
 package com.zxg.jetpack.application;
 
+import android.os.Handler;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
 import androidx.lifecycle.DefaultLifecycleObserver;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleOwner;
 
 public class MyObserver implements DefaultLifecycleObserver {
+
+    private MyViewModel mViewModel;
+
+    public MyObserver(MyViewModel viewModel) {
+        this.mViewModel = viewModel;
+    }
     private static final String TAG = MyObserver.class.getSimpleName();
 
     @Override
@@ -28,7 +34,6 @@ public class MyObserver implements DefaultLifecycleObserver {
     @Override
     public void onResume(LifecycleOwner owner) {
         Log.i(TAG, "onResume");
-
     }
 
     @Override
