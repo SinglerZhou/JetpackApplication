@@ -6,4 +6,8 @@
     <string name="please_enter_password">请输入密码</string>
     <string name="user_height">身高</string>
     <string name="please_enter_height">请输入身高</string>
+    <string name="insert">insert</string>
+    <string name="query">query</string>
+    <string name="update">update</string>
+    <string name="delete">delete</string>
 </resources>
