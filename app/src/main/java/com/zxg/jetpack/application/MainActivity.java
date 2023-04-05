@@ -64,20 +64,31 @@ public class MainActivity extends AppCompatActivity {
 
     private void initEvent() {
         mDataBinding.roomInsert.setOnClickListener(view -> {
-            Word word = new Word("hello", "你好");
-            Word word2 = new Word("you", "你");
-            Word word3 = new Word("me", "我");
-            Word word4 = new Word("world", "世界");
-            mWordDao.insertWords(word, word2, word3, word4);
-            Log.i(TAG, "insert");
-
-            updateView();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    Word word = new Word("hello", "你好");
+                    Word word2 = new Word("you", "你");
+                    Word word3 = new Word("me", "我");
+                    Word word4 = new Word("world", "世界");
+                    mWordDao.insertWords(word, word2, word3, word4);
+                    Log.i(TAG, "insert");
+                    updateView();
+                }
+            }).start();
         });
         mDataBinding.roomDelete.setOnClickListener(view -> {
-            Word word3 = new Word("me", "我");
-            word3.setUid(2); // 删除id为 2的word条目
-            mWordDao.deleteWords(word3);
-            Log.i(TAG, "delete");
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    Word word3 = new Word("me", "我");
+                    word3.setUid(2); // 删除id为 2的word条目
+                    mWordDao.deleteWords(word3);
+                    Log.i(TAG, "delete");
+                    updateView();
+                }
+            }).start();
+
         });
         mDataBinding.roomQuery.setOnClickListener(view -> {
 
@@ -137,7 +148,12 @@ public class MainActivity extends AppCompatActivity {
             roomData.append(word.uid).append(":").append(word.getFirstName()).append(" = ").append(word.getLastName()).append("\n");
         }
 
-        mDataBinding.roomText.setText(roomData.toString());
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mDataBinding.roomText.setText(roomData.toString());
+            }
+        });
     }
 
 
@@ -149,38 +165,28 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void doGet() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Log.i(TAG, "start do get request");
-                OkHttpClient okhttpClient = OkhttpUtils.getInstance().getOkhttpClient();
-                Request request = new Request.Builder()
-//                        .url("https://www.wanandroid.com/blog/show/2")
-                        .url("https://www.wanandroid.com/article/list/0/json")
-                        .build();
-                Call call = okhttpClient.newCall(request);
-                call.enqueue(new Callback() {
-                    @Override
-                    public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                        Log.i(TAG, "doGet onFailure e = " + e);
-                    }
+        String url = "https://www.wanandroid.com/article/list/0/json";
 
+        OkhttpUtils.getInstance().doGet(url, new CallBack() {
+            @Override
+            public void onFail(int errorCode, String errorMsg) {
+                Log.i(TAG, "doGet onFail errorMsg:" + errorMsg);
+
+            }
+
+            @Override
+            public void onSuccess(String responseJson) {
+                Log.i(TAG, "doGet onResponse responseJson:" + responseJson);
+                runOnUiThread(new Runnable() {
                     @Override
-                    public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                        String string = response.body().string();
-                        Log.i(TAG, "doGet onResponse response:" + string);
+                    public void run() {
                         Gson gson = new Gson();
-                        WanAndroidBean wanAndroidBean = gson.fromJson(string, WanAndroidBean.class);
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                String link = wanAndroidBean.getData().getDatas().get(0).getLink();
-                                mDataBinding.okhttpResult.setText("size: " + wanAndroidBean.getData().getSize()+ "\n " + link);
-                            }
-                        });
+                        WanAndroidBean wanAndroidBean = gson.fromJson(responseJson, WanAndroidBean.class);
+                        String link = wanAndroidBean.getData().getDatas().get(0).getLink();
+                        mDataBinding.okhttpResult.setText("size: " + wanAndroidBean.getData().getSize()+ "\n " + link);
                     }
                 });
             }
-        }).start();
+        });
     }
 }

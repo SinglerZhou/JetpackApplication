@@ -113,7 +113,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/room_cl"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:paddingStart="20dp"
             android:paddingLeft="20dp"
@@ -121,8 +121,8 @@
 
             <Button
                 android:id="@+id/room_insert"
-                android:layout_width="40dp"
-                android:layout_height="20dp"
+                android:layout_width="100dp"
+                android:layout_height="40dp"
                 android:layout_marginTop="10dp"
                 android:text="@string/insert"
                 android:textColor="#F00"
@@ -131,8 +131,8 @@
 
             <Button
                 android:id="@+id/room_delete"
-                android:layout_width="40dp"
-                android:layout_height="20dp"
+                android:layout_width="100dp"
+                android:layout_height="40dp"
                 android:layout_marginTop="10dp"
                 android:text="@string/delete"
                 android:textColor="#F00"
@@ -141,8 +141,8 @@
 
             <Button
                 android:id="@+id/room_update"
-                android:layout_width="40dp"
-                android:layout_height="20dp"
+                android:layout_width="100dp"
+                android:layout_height="40dp"
                 android:layout_marginTop="10dp"
                 android:text="@string/update"
                 android:textColor="#F00"
@@ -151,18 +151,18 @@
 
             <Button
                 android:id="@+id/room_query"
-                android:layout_width="40dp"
-                android:layout_height="20dp"
+                android:layout_width="100dp"
+                android:layout_height="40dp"
                 android:layout_marginTop="10dp"
                 android:text="@string/query"
                 android:textColor="#F00"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/room_update" />
 
-            <Button
+            <TextView
                 android:id="@+id/room_text"
-                android:layout_width="40dp"
-                android:layout_height="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
                 android:layout_marginTop="10dp"
                 android:text="@string/room_text"
                 android:textColor="@color/black"
