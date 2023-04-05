@@ -9,10 +9,22 @@ import androidx.room.Room;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
+import android.view.textclassifier.TextLinks;
 
+import com.google.gson.Gson;
 import com.zxg.jetpack.application.databinding.ActivityMainBinding;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
 import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -72,8 +84,15 @@ public class MainActivity extends AppCompatActivity {
             Log.i(TAG, "query");
         });
         mDataBinding.roomUpdate.setOnClickListener(view -> {
-
             Log.i(TAG, "update");
+        });
+
+        // 测试okhttp请求
+        mDataBinding.okhttpGet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                doGet();
+            }
         });
     }
 
@@ -89,8 +108,46 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+
     private void initData() {
 //        User user = new User("张三", 28, 172, "女");
 //        mDataBinding.setUser(user);
+    }
+
+
+    public void doGet() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Log.i(TAG, "start do get request");
+                OkHttpClient okhttpClient = new OkHttpClient();
+                Request request = new Request.Builder()
+//                        .url("https://www.wanandroid.com/blog/show/2")
+                        .url("https://www.wanandroid.com/article/list/0/json")
+                        .build();
+                Call call = okhttpClient.newCall(request);
+                call.enqueue(new Callback() {
+                    @Override
+                    public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                        Log.i(TAG, "onFailure e = " + e);
+                    }
+
+                    @Override
+                    public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                        String string = response.body().string();
+                        Log.i(TAG, "onResponse response:" + string);
+                        Gson gson = new Gson();
+                        WanAndroidBean wanAndroidBean = gson.fromJson(string, WanAndroidBean.class);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                String link = wanAndroidBean.getData().getDatas().get(0).getLink();
+                                mDataBinding.okhttpResult.setText("size: " + wanAndroidBean.getData().getSize()+ "\n " + link);
+                            }
+                        });
+                    }
+                });
+            }
+        }).start();
     }
 }

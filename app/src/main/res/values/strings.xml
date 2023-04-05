@@ -10,4 +10,6 @@
     <string name="query">query</string>
     <string name="update">update</string>
     <string name="delete">delete</string>
+    <string name="room_text">room_text</string>
+    <string name="do_get">get请求</string>
 </resources>
