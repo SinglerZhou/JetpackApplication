@@ -7,10 +7,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.room.Room;
 
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.view.textclassifier.TextLinks;
 
 import com.google.gson.Gson;
 import com.zxg.jetpack.application.databinding.ActivityMainBinding;
@@ -22,8 +20,10 @@ import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
@@ -94,6 +94,39 @@ public class MainActivity extends AppCompatActivity {
                 doGet();
             }
         });
+
+        // Okhttp 的post请求
+        mDataBinding.okhttpPost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                doPost();
+            }
+        });
+    }
+
+    private void doPost() {
+        Log.i(TAG, "doPost");
+        OkHttpClient okhttpClient = OkhttpUtils.getInstance().getOkhttpClient();
+        MediaType parse = MediaType.parse("");
+        String content = "";
+        RequestBody requestBody = RequestBody.create(parse, content);
+        Request request = new Request.Builder()
+                .url("https://www.wanandroid.com/lg/uncollect_originId/2333/json")
+                .post(requestBody)
+        .build();
+        Call call = okhttpClient.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                Log.i(TAG, "doPost onFailure, e = " + e);
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                String string = response.body().string();
+                Log.i(TAG, "doPost, onResponse string = " + string);
+            }
+        });
     }
 
     private void updateView() {
@@ -120,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 Log.i(TAG, "start do get request");
-                OkHttpClient okhttpClient = new OkHttpClient();
+                OkHttpClient okhttpClient = OkhttpUtils.getInstance().getOkhttpClient();
                 Request request = new Request.Builder()
 //                        .url("https://www.wanandroid.com/blog/show/2")
                         .url("https://www.wanandroid.com/article/list/0/json")
@@ -129,13 +162,13 @@ public class MainActivity extends AppCompatActivity {
                 call.enqueue(new Callback() {
                     @Override
                     public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                        Log.i(TAG, "onFailure e = " + e);
+                        Log.i(TAG, "doGet onFailure e = " + e);
                     }
 
                     @Override
                     public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                         String string = response.body().string();
-                        Log.i(TAG, "onResponse response:" + string);
+                        Log.i(TAG, "doGet onResponse response:" + string);
                         Gson gson = new Gson();
                         WanAndroidBean wanAndroidBean = gson.fromJson(string, WanAndroidBean.class);
                         runOnUiThread(new Runnable() {
