@@ -12,6 +12,9 @@ import android.view.View;
 
 import com.google.gson.Gson;
 import com.zxg.jetpack.application.databinding.ActivityMainBinding;
+import com.zxg.jetpack.application.room.Word;
+import com.zxg.jetpack.application.room.WordDao;
+import com.zxg.jetpack.application.room.WordDataBase;
 
 import org.jetbrains.annotations.NotNull;
 

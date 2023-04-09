@@ -1,4 +1,4 @@
-package com.zxg.jetpack.application;
+package com.zxg.jetpack.application.room;
 
 import androidx.room.Database;
 import androidx.room.RoomDatabase;

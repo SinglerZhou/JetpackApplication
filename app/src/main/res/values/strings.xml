@@ -13,4 +13,8 @@
     <string name="room_text">room_text</string>
     <string name="do_get">get请求</string>
     <string name="do_post">post请求</string>
+    <string name="login_state">此处显示登录状态</string>
+    <string name="login">登录</string>
+    <string name="user_name_hint">请输入用户名</string>
+    <string name="password_hint">请输入密码</string>
 </resources>
